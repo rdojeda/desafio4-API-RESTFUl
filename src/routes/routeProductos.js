@@ -10,7 +10,8 @@ const multer = require("multer");
 // 'image' campo en el formulario para subir imagen.
 const storage = multer.diskStorage({
   destination: (req, file, cb) =>{
-    cb(null, __dirname + '/public/uploads');
+    cb(null, 'src/public/uploads');
+   
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
@@ -36,6 +37,7 @@ router.get("/:id", (req, res) => {
 router.post("/", (req, res) => {
   const body = req.body;
   const image = req.file;
+  console.log(req)
   body.thumbnail = image.filename;
   contenedorProductos.saveProducto(body, file);
   res.json({ message: "Producto guardado", producto: body });
@@ -46,10 +48,9 @@ router.put("/:id", (req, res) => {
   const { id } = req.params;
   const { body } = req;
   const producto = contenedorProductos.getById(parseInt(id), file);
-  producto
-    ? contenedorProductos.updateProducto(id, body, file)
-    : res.json({ message: "Producto no encontrado. Id: " + id });
-  res.json({ message: "Producto actualizado", producto: body });
+  producto ? contenedorProductos.updateProducto(id, body, file) : res.json(
+    {message: "Producto no encontrado. Id: " + id });
+    res.json({ message: "Producto actualizado", producto: body });
 });
 
 //Delete - Eliminar producto de un Id determinado

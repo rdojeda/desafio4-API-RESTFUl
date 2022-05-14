@@ -16,14 +16,14 @@ class Contenedor {
 
     updateProducto(id, producto, file) {
         const arrayProductos = this.readFunction(file)
-        let productoId = arrayProductos.find((e) => e.id === id)
-        if (productoId >= 0) {
-            arrayProductos[productoId] = producto
-            this.writeFunction(arrayProductos, file)
-            console.log('Producto actualizado')
-        } else {
-            console.log('No se encontró el producto')
-        }
+        let index = arrayProductos.findIndex( producto => producto.id == id)
+            if(index >= 0) {
+                arrayProductos[index] = producto
+                this.writeFunction(arrayProductos, file)
+                console.log('Producto actualizado')
+            } else {
+                console.log('No se encontró el producto')
+            }
     }
     
 
@@ -77,10 +77,10 @@ class Contenedor {
 
   deleteById(id, file) {
       let arrayProductos = this.readFunction(file);
-      let productoId = arrayProductos.find((e) => e.id === id)
+      let index = arrayProductos.findIndex(producto => producto.id == id)
       
-      if (productoId >= 0) {
-          arrayProductos.splice(productoId, 1)
+      if (index >= 0) {
+          arrayProductos.splice(index, 1)
           let fileJson = JSON.stringify(arrayProductos)
           try {
               fs.writeFileSync(file, fileJson)
