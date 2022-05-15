@@ -1,20 +1,29 @@
 const express = require("express");
 const morgan = require("morgan");
-const routeProductos = require("./routes/routeProductos.js");
+const routes = require("./routes/routeProductos");
+const path = require("path")
 
 const app = express();
+
 //settings
 app.set("port", process.env.PORT || 8000);
+app.set("views", path.join(__dirname, 'views'))
+app.set("view engine", "ejs")
 
 //Middleware
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(express.static(__dirname + '/public'));
-
+app.use((req, res, next) => {
+  console.log(`${req.url} - ${req.method}`)
+  next()
+})
 //Routes
-app.use("/api/productos", routeProductos);
+app.use(routes);
+
+//Files static
+app.use(express.static(path.join(__dirname + 'public')));
 
 // Starting the server
 try {
